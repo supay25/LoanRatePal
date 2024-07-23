@@ -4,38 +4,39 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-     
+
     <h:head>
         <title>Dashboard</title>
-      
+
         <link rel="stylesheet" href="https://css.gg/icons/all.css"/>
         <link href='https://unpkg.com/css.gg@2.0.0/icons/css/home.css' rel='stylesheet'/>
         <link href='https://unpkg.com/css.gg@2.0.0/icons/css/briefcase.css' rel='stylesheet'/>
         <link href='https://unpkg.com/css.gg@2.0.0/icons/css/align-bottom.css' rel='stylesheet'/>
         <link href='https://unpkg.com/css.gg@2.0.0/icons/css/browse.css' rel='stylesheet'/>
         <style>
-            .body{
-                background-color: #B0D7FF;
+            body {
+                background-color: #f8efe6;
+                margin: 0;
+                padding: 0;
             }
             .container-left {
                 display: flex;
                 justify-content: flex-end;
-                padding: 10px; /* Adjust padding as needed */
+                padding: 10px;
             }
-           
+
             .left-bar {
-                background-color: #2D3142; /* Set the background color to dark blue */
+                background-color: #2D3142;
                 padding: 15px;
                 position: fixed;
                 left: 0;
                 top: 0;
-                z-index: 1; /* Ensure the left bar is in front of other elements */
+                z-index: 1;
                 height: 100vh;
-                width: 15%; /* Fixed width */
+                width: 15%;
                 display: flex;
-                flex-direction: column; /* Stack children vertically */
-              
-                align-items: center; /* Center children horizontally */
+                flex-direction: column;
+                align-items: center;
             }
 
             .left-bar ul {
@@ -43,8 +44,8 @@
                 padding: 0;
                 margin-top: 50%;
                 display: flex;
-                flex-direction: column; /* Stack list items vertically */
-                align-items:flex-start ; /* Center list items horizontally */
+                flex-direction: column;
+                align-items: flex-start;
             }
 
             .left-bar li {
@@ -52,27 +53,54 @@
             }
 
             .left-bar a {
-                color: white; /* Change link color to white */
+                color: white;
                 text-decoration: none;
                 font-size: 16px;
                 display: flex;
-                align-items: center; /* Align items vertically */
+                align-items: center;
             }
 
             .left-bar a i {
-                margin-right: 15px; /* Space between icon and text */
+                margin-right: 15px;
             }
 
             .left-bar a:hover {
-                color: #cccccc; /* Change link color on hover */
+                color: #cccccc;
             }
+
             .content {
-                margin-left: 10%; /* Same width as the left-bar */
+                margin-left: 15%; /* Ensure it doesn't overlap with left-bar */
                 padding: 20px;
                 display: flex;
-                justify-content: center;
+                flex-direction: column; /* Stack items vertically */
                 align-items: center;
-                height: 100vh; /* Full height */
+                height: 100vh;
+                overflow: auto;
+            }
+
+            .bienvenida {
+               
+                padding: 20px; /* Space around the content */
+                border-radius: 8px; /* Rounded corners for a modern feel */
+               
+                margin-bottom: 10px; /* Space below the welcome section */
+                align-self: flex-start;
+            }
+
+            .welcome-text {
+                font-size: 40px; /* Larger text for prominence */
+                font-weight: bold; /* Bold text for emphasis */
+                color: #333; /* Dark grey text color for readability */
+                text-align:start; /* Center align the text */
+                margin: 0; /* Remove default margin */
+            }
+
+            .dashboard {
+                width: 1200px;
+                height: 800px;
+                border: 0;
+                margin-right: 10%;
+                
             }
         </style>
     </h:head>
@@ -86,9 +114,12 @@
             </ul>
         </div>
         <div class="content">
-            
-        
-        <iframe width="900" height="700" src="https://lookerstudio.google.com/embed/reporting/b7785e82-b7a0-4821-8482-45d359b924bc/page/Lxa6D" frameborder="0" style="border:0" allowfullscreensandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe> 
+            <div class="bienvenida">
+                <p class="welcome-text">Bienvenidos al Dashboard 👋</p>
+            </div>
+            <div>
+                <iframe class="dashboard" src="https://lookerstudio.google.com/embed/reporting/b7785e82-b7a0-4821-8482-45d359b924bc/page/Lxa6D" frameborder="0" allowfullscreensandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe> 
+            </div>
         </div>
     </h:body>
 </html>
