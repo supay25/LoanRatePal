@@ -75,21 +75,27 @@ public class LoginController implements Serializable {
     }
   
      //ss
-      public void ingresar() {
-        ServicioEmpleado s = new ServicioEmpleado();
+public void ingresar() {
+    ServicioEmpleado s = new ServicioEmpleado();
 
-        if (s.Ver(this.getUsuario(), this.getClave())) {
-              int id_acc = s.obtenerPermisoUsuario(this.getUsuario());
-             
-            if (id_acc == 1) {
-                this.redireccionar("/faces/Dashboard.xhtml");
-            } else {
-//                this.redireccionar("/faces/Solicitudes.xhtml");
-            }
+    if (s.Ver(this.getUsuario(), this.getClave())) {
+        String rol = s.obtenerRolUsuario(this.getUsuario());
+
+        if ("Recursos Humanos".equals(rol)) {
+            this.redireccionar("/faces/Dashboard.xhtml");
+        } else if ("Administrador".equals(rol)) {
+            this.redireccionar("/faces/ConfigAdmin.xhtml");
+        } else if ("General".equals(rol)) {
+            this.redireccionar("/faces/VistaEmpleados.xhtml");
         } else {
-            FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Campos Invalidos", "La clave o correo no son correctos"));
+            FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Campos Invalidos", "Rol desconocido"));
         }
+    } else {
+        FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Campos Invalidos", "La clave o correo no son correctos"));
     }
-     
-     
 }
+
+}
+
+     
+     
