@@ -17,25 +17,22 @@ public class EmpleadoTO {
     String email;
     double salario;
     int telefono;
-    int idrol;
-    int acceso;
-    
+   
     
     public EmpleadoTO() {
         
     }
 
-    public EmpleadoTO(int idempleado, int cedula, String nombre, String email, double salario, int telefono, int idrol, int acceso) {
+    public EmpleadoTO(int idempleado, int cedula, String nombre, String email, double salario, int telefono) {
         this.idempleado = idempleado;
         this.cedula = cedula;
         this.nombre = nombre;
         this.email = email;
         this.salario = salario;
         this.telefono = telefono;
-        this.idrol = idrol;
-        this.acceso = acceso;
     }
 
+    
     
     public int getIdempleado() {
         return idempleado;
@@ -85,20 +82,5 @@ public class EmpleadoTO {
         this.telefono = telefono;
     }
 
-    public int getIdrol() {
-        return idrol;
-    }
-
-    public void setIdrol(int idrol) {
-        this.idrol = idrol;
-    }
-
-    public int getAcceso() {
-        return acceso;
-    }
-
-    public void setAcceso(int acceso) {
-        this.acceso = acceso;
-    }
-
+  
 }

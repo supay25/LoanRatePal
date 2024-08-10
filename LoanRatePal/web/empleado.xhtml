@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Tu perfil</title>
+        <style>
+            body {
+                background-color: #F5F5DC; 
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif; 
+            }
+
+
+            .left-bar {
+                background-color:#5F9EA0; /* Color de fondo de la barra lateral */
+                padding: 15px;
+                position: fixed;
+                left: 0;
+                top: 0;
+                z-index: 1;
+                height: 100vh;
+                width: 14%; /* Ancho fijo para la barra lateral */
+                display: flex;
+                flex-direction: column; /* Organiza los botones en una columna */
+                justify-content: flex-start; /* Centra los botones verticalmente */
+                align-items: center; /* Centra los botones horizontalmente */
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+            }
+
+            .left-bar-header {
+                flex: 0 0 auto; /* Evita que el título crezca o se reduzca */
+                margin-bottom: 20px; /* Espacio debajo del título */
+            }
+
+            .left-bar-title {
+                color: white;
+                font-size: 18px;
+                text-align: center; /* Centra el texto horizontalmente */
+                width: 100%; /* Asegura que el título ocupe todo el ancho de la barra */
+            }
+            .left-bar .command-button {
+                color: white;
+                border: none;
+                border-radius: 4px;
+                padding: 10px 20px;
+                cursor: pointer;
+                font-family: Arial, sans-serif; /* Mantener la coherencia con la fuente del cuerpo */
+                width: 100%; /* Asegurar que los botones ocupen todo el ancho del contenedor */
+                text-align: center; /* Centrar el texto dentro del botón */
+
+                margin: 9px 0; /* Espacio entre los botones */
+                transition: background-color 0.3s ease; /* Efecto de transición para el color de fondo */
+
+            }
+
+            .command-button.vacaciones {
+                background-color: #5F9EA0;
+            }
+
+            .command-button.cronometro {
+                background-color: #5F9EA0;
+            }
+
+            .command-button.guardar {
+                background-color: #5F9EA0;
+            }
+
+            .profile-content {
+
+                padding: 20px;
+
+                box-sizing: border-box; /* Incluye el padding en el ancho total */
+                height: 100vh; /* Asegura que el área de contenido tenga la altura completa */
+                overflow-y: auto; /* Permite el desplazamiento vertical si el contenido es largo */
+            }
+
+            .panel {
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <h:form id="form">
+            <p:growl id="messages" showDetail="True" />
+
+            <!-- Barra lateral -->
+            <div class="left-bar">
+
+                <div class="left-bar-header">
+                    <h2 class="left-bar-title">Acciones</h2>
+                </div>
+
+
+                <div class="left-bar-content">
+                    <p:commandButton icon="pi pi-calendar" value="Vacaciones" 
+                                     styleClass="command-button vacaciones" 
+                                     type="button" onclick="PF('dlgVacaciones').show()" />
+
+
+                    <p:commandButton icon="pi pi-user" value="Guardar cambios" 
+                                     action="#{empleadosController.guardarCambios()}" 
+                                     update="messages form" 
+                                     styleClass="command-button guardar" />
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <p:panel header="Tu perfil" styleClass="panel" style="margin-left: 15%; padding-left: 20px;">
+                    <h:panelGrid columns="2" cellpadding="5">
+
+                        <h:outputLabel for="cedula" value="Cédula" />
+                        <p:inputText id="cedula" value="#{empleadosController.empleado.cedula}" disabled="true" />
+
+                        <h:outputLabel for="nombre" value="Nombre" />
+                        <p:inputText id="nombre" value="#{empleadosController.empleado.nombre}" disabled="true" />
+
+
+                        <h:outputLabel for="salario" value="Salario" />
+                        <p:inputText id="salario" value="#{empleadosController.empleado.salario}" disabled="true"/>
+
+                        <h:outputLabel for="email" value="Email" />
+                        <p:inputText id="email" value="#{empleadosController.empleado.email}" />
+
+                        <h:outputLabel for="telefono" value="Teléfono" />
+                        <p:inputText id="telefono" value="#{empleadosController.empleado.telefono}" />
+                    </h:panelGrid>
+
+                    <p:separator />
+                    <p:dialog header="Rango de vacaciones" widgetVar="dlgVacaciones" modal="false" width="400">
+                        <h:panelGrid columns="1" cellpadding="0" style="text-align: center;">
+
+                            <h:outputLabel value="Seleccione sus vacaciones:" style="margin-bottom: 10px;" />
+                            <p:datePicker id="vacaciones" value="#{empleadosController.vacaciones}" 
+                                          selectionMode="multiple" readonlyInput="true" style="margin-bottom: 15px;" />
+                            <p:commandButton value="Guardar" icon="pi pi-check" action="#{empleadosController.guardarVacaciones()}" 
+                                             oncomplete="PF('dlgVacaciones').hide()" update="vacaciones messages" style="margin-left: -60px; margin-top: 15px;" />
+                        </h:panelGrid>
+
+                    </p:dialog> 
+
+                </p:panel>
+            </div>   
+        </h:form>
+    </h:body>
+
+</html>

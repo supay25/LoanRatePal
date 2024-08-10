@@ -5,7 +5,7 @@
  */
 package controllers;
 
-
+import com.cci.service.EmpleadoTO;
 import com.cci.service.ServicioEmpleado;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import org.primefaces.event.RowEditEvent;
 @SessionScoped
 
 public class LoginController implements Serializable {
-    
+
     private String usuario;
     private String clave;
     private int cedula;
@@ -59,13 +59,9 @@ public class LoginController implements Serializable {
     public void setCedula(int cedula) {
         this.cedula = cedula;
     }
-    
-    
-    
-    
-    
-     public void redireccionar(String ruta) {
-        
+
+    public void redireccionar(String ruta) {
+
         HttpServletRequest request;
         try {
             request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -73,29 +69,31 @@ public class LoginController implements Serializable {
         } catch (Exception e) {
         }
     }
-  
-     //ss
-public void ingresar() {
-    ServicioEmpleado s = new ServicioEmpleado();
 
-    if (s.Ver(this.getUsuario(), this.getClave())) {
-        String rol = s.obtenerRolUsuario(this.getUsuario());
+    //ss
+    public void ingresar() {
+        ServicioEmpleado s = new ServicioEmpleado();
 
-        if ("Recursos Humanos".equals(rol)) {
-            this.redireccionar("/faces/Dashboard.xhtml");
-        } else if ("Administrador".equals(rol)) {
-            this.redireccionar("/faces/ConfigAdmin.xhtml");
-        } else if ("General".equals(rol)) {
-            this.redireccionar("/faces/VistaEmpleados.xhtml");
-        } else {
-            FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Campos Invalidos", "Rol desconocido"));
+        if (s.Ver(this.getUsuario(), this.getClave())) {
+            String rol = s.obtenerRolUsuario(this.getUsuario());
+            EmpleadoTO empleado = s.obtenerEmpleadoIdPorUsuario(this.getUsuario());
+
+            if (empleado != null) {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idempleado", empleado.getIdempleado());
+
+                if ("Recursos Humanos".equals(rol)) {
+                    this.redireccionar("/faces/Dashboard.xhtml");
+                } else if ("Administrador".equals(rol)) {
+                    this.redireccionar("/faces/ConfigAdmin.xhtml");
+                } else if ("General".equals(rol)) {
+                    this.redireccionar("/faces/empleado.xhtml");
+                } else {
+                    FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Campos Invalidos", "Rol desconocido"));
+                }
+            } else {
+                FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Campos Invalidos", "La clave o correo no son correctos"));
+            }
         }
-    } else {
-        FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Campos Invalidos", "La clave o correo no son correctos"));
+
     }
 }
-
-}
-
-     
-     
