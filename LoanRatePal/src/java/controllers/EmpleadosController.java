@@ -7,6 +7,7 @@ package controllers;
 
 import com.cci.service.EmpleadoTO;
 import com.cci.service.ServicioEmpleado;
+import com.cci.service.VacacionesTO;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -97,11 +98,14 @@ public class EmpleadosController implements Serializable {
                 Date inicio = vacaciones.get(0);
                 Date fin = vacaciones.get(1);
 
-                boolean guardado = servicioEmpleado.guardarVacaciones(inicio, fin, idempleado);
+               
+                VacacionesTO vacacionesTO = new VacacionesTO(idempleado, inicio, fin);
+
+                boolean guardado = servicioEmpleado.guardarVacaciones(vacacionesTO);
 
                 if (guardado) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Las vacaciones se han guardado correctamente."));
-                    vacaciones = null;
+                    vacaciones = null;  // Limpia la selección de vacaciones después de guardar
                 } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudieron guardar las vacaciones."));
                 }

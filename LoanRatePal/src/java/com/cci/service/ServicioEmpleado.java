@@ -149,13 +149,14 @@ public class ServicioEmpleado  extends Service {
         return actualizado;
     }
     
-    public boolean guardarVacaciones(Date inicio, Date fin, int idempleado) {
+   public boolean guardarVacaciones(VacacionesTO vacaciones) {
     try {
         PreparedStatement stmt = super.getConexion().prepareStatement(
-            "INSERT INTO vacaciones (id_em,inicio, fin) VALUES (?, ?, ?)");
-        stmt.setInt(1, idempleado);
-        stmt.setDate(2, new java.sql.Date(inicio.getTime()));
-        stmt.setDate(3, new java.sql.Date(fin.getTime()));
+            "INSERT INTO vacaciones (id_em, inicio, fin) VALUES (?, ?, ?)"
+        );
+        stmt.setInt(1, vacaciones.getIdEmpleado());
+        stmt.setDate(2, new java.sql.Date(vacaciones.getInicio().getTime()));
+        stmt.setDate(3, new java.sql.Date(vacaciones.getFin().getTime()));
 
         int filasInsertadas = stmt.executeUpdate();
         stmt.close();
