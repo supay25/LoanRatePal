@@ -22,7 +22,7 @@ import javax.faces.context.FacesContext;
  */
 public class ServicioAsistencia extends Service {
 
-    public void insertar(AsistenciaTO asistencia, String fecha) {
+    public void insertar(AsistenciaTO asistencia, Date fecha) {
         try {
             if (tiendaExists(fecha, asistencia.getIdEmpleado())) {
                 //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al insertar usuario", "Hubo un error al insertar el usuario"));
@@ -31,7 +31,7 @@ public class ServicioAsistencia extends Service {
                 //stmt.setInt(1, userTO.getId());
 
                 stmt.setString(1, asistencia.getStatus());
-                stmt.setString(2, fecha);
+                stmt.setDate(2,new java.sql.Date(fecha.getTime()));
                 stmt.setInt(3, asistencia.getIdEmpleado());
                 stmt.execute();
 
@@ -46,7 +46,7 @@ public class ServicioAsistencia extends Service {
                     PreparedStatement stmt = super.getConexion().prepareStatement("INSERT INTO asistencia (fecha, idEmpleado,status) VALUES (?,?,?)");
                     //stmt.setInt(1, userTO.getId());
 
-                    stmt.setString(1, fecha);
+                    stmt.setDate(1, new java.sql.Date(fecha.getTime()));
                     stmt.setInt(2, asistencia.getIdEmpleado());
                     stmt.setString(3, asistencia.getStatus());
                     stmt.execute();
@@ -65,10 +65,10 @@ public class ServicioAsistencia extends Service {
     }
 
     //Revisa si ya hay una tienda existente por el nombre
-    public boolean tiendaExists(String fecha, int empleado) {
+    public boolean tiendaExists(Date fecha, int empleado) {
         try {
             PreparedStatement checkStmt = super.getConexion().prepareStatement("SELECT COUNT(*) FROM asistencia WHERE fecha = ? and idEmpleado = ?");
-            checkStmt.setString(1, fecha);
+            checkStmt.setDate(1, new java.sql.Date(fecha.getTime()));
             checkStmt.setInt(2, empleado);
 
             ResultSet result = checkStmt.executeQuery();
@@ -86,19 +86,19 @@ public class ServicioAsistencia extends Service {
 
         List<AsistenciaTO> listaRetorno = new ArrayList<>();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("d 'de' MMMM 'del' yyyy", new Locale("es", "ES"));  
+        SimpleDateFormat sdf = new SimpleDateFormat("d'/'MMMM '/'yyyy", new Locale("es", "ES"));  
         Date fecha = new Date();
-        String formattedDate = sdf.format(fecha);
+        java.sql.Date sqlDate = new java.sql.Date(fecha.getTime());
 
         // First query to get asistencia records
         try {
             PreparedStatement stmt1 = super.getConexion().prepareStatement("SELECT  e.idEmpleado,e.cedula, e.nombre ,a.fecha, a.status FROM loanratepal.empleado e JOIN loanratepal.asistencia a ON a.idEmpleado = e.idempleado WHERE a.fecha = ?;");
-            stmt1.setString(1, sdf.format(fecha));
+            stmt1.setDate(1, sqlDate);
             ResultSet rs1 = stmt1.executeQuery();
 
             while (rs1.next()) {
                 int idEmpleado = rs1.getInt("e.idEmpleado");
-                String fechaPuntual = rs1.getString("a.fecha");
+                Date fechaPuntual = rs1.getDate("a.fecha");
                 String nombreEmpleado = rs1.getString("e.nombre");
                 String status = rs1.getString("a.status");
 

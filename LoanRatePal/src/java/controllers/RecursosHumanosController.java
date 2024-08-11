@@ -8,6 +8,7 @@ package controllers;
 import com.cci.service.AsistenciaTO;
 import com.cci.service.EmpleadoTO;
 import com.cci.service.ServicioAsistencia;
+import com.cci.service.ServicioPlanilla;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,29 +26,68 @@ import javax.faces.bean.SessionScoped;
 public class RecursosHumanosController {
     
     ServicioAsistencia asistencia = new ServicioAsistencia();
+    ServicioPlanilla planillaServicio = new ServicioPlanilla();
     private List<AsistenciaTO> empleados = asistencia.listaAsistencia();
     private AsistenciaTO empleadoSeleccionado;
     private Date currentDate;
-    private SimpleDateFormat sdf;
+    private SimpleDateFormat sdf;   
+    private List<EmpleadoTO> planilla;
+    private EmpleadoTO empleadoSeleccionadoTO;
+    private Date fechaInicio;
+    private Date fechaFinal;
+    
     
     public RecursosHumanosController() {
         currentDate = new Date();
     }
     
     public String getFormattedDate() {
-         sdf = new SimpleDateFormat("d 'de' MMMM 'del' yyyy", new Locale("es", "ES"));              
+        SimpleDateFormat sdf = new SimpleDateFormat("d'/'MMMM '/'yyyy", new Locale("es", "ES"));                
         return sdf.format(currentDate);
     }
     
     public void guardarAsistencia() {
-       
-        
-        System.out.println("Aqui estas " + this.empleadoSeleccionado.getStatus() + sdf.format(currentDate));
-        
-        asistencia.insertar(this.empleadoSeleccionado, sdf.format(currentDate));
+  
+        asistencia.insertar(this.empleadoSeleccionado, currentDate);
        // this.empleados = asistencia.listaAsistencia();
+               
+    }
+    public void buscarPlanillas(){
         
+        this.planilla = planillaServicio.listaPlanillaa(fechaInicio, fechaFinal);
+    }
+    public void guardarNomina(){
         
+        planillaServicio.guardar(this.empleadoSeleccionadoTO,fechaInicio,fechaFinal);
+        
+    }
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaFinal() {
+        return fechaFinal;
+    }
+
+    public void setFechaFinal(Date fechaFinal) {
+        this.fechaFinal = fechaFinal;
+    }
+    
+
+    
+    
+    
+
+    public EmpleadoTO getEmpleadoSeleccionadoTO() {
+        return empleadoSeleccionadoTO;
+    }
+
+    public void setEmpleadoSeleccionadoTO(EmpleadoTO empleadoSeleccionadoTO) {
+        this.empleadoSeleccionadoTO = empleadoSeleccionadoTO;
     }
     
 
@@ -75,6 +115,14 @@ public class RecursosHumanosController {
 
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
+    }
+
+    public List<EmpleadoTO> getPlanilla() {
+        return planilla;
+    }
+
+    public void setPlanilla(List<EmpleadoTO> planilla) {
+        this.planilla = planilla;
     }
     
     

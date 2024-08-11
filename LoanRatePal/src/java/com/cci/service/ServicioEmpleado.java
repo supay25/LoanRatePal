@@ -103,7 +103,7 @@ public class ServicioEmpleado  extends Service {
             PreparedStatement stmt = super.getConexion().prepareStatement(
                     "SELECT e.idempleado, e.cedula, e.nombre, e.email, e.salario, e.telefono  "
                     + "FROM empleado e "
-                    + "INNER JOIN usuario u ON e.idempleado = u.idEmpleado "
+                    + "INNER JOIN usuario u ON e.idempleado = u.id_emple "
                     + "WHERE u.Usuario = ?"
             );
             stmt.setString(1, usuario);

@@ -5,6 +5,8 @@
  */
 package com.cci.service;
 
+import java.util.Date;
+
 /**
  *
  * @author ADMIN
@@ -17,7 +19,11 @@ public class EmpleadoTO {
     String email;
     double salario;
     int telefono;
-   
+    int dias;
+    double salarioBruto;
+    double salarioNeto;
+    Date fechaIncio;
+    Date fechaFin;
     
     public EmpleadoTO() {
         
@@ -31,6 +37,48 @@ public class EmpleadoTO {
         this.salario = salario;
         this.telefono = telefono;
     }
+
+    public int getDias() {
+        return dias;
+    }
+
+    public void setDias(int dias) {
+        this.dias = dias;
+    }
+
+    public double getSalarioBruto() {
+        return salarioBruto;
+    }
+
+    public void setSalarioBruto(double salarioBruto) {
+        this.salarioBruto = salarioBruto;
+    }
+
+    public double getSalarioNeto() {
+        return salarioNeto;
+    }
+
+    public void setSalarioNeto(double salarioNeto) {
+        this.salarioNeto = salarioNeto;
+    }
+
+    public Date getFechaIncio() {
+        return fechaIncio;
+    }
+
+    public void setFechaIncio(Date fechaIncio) {
+        this.fechaIncio = fechaIncio;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+  
+    
 
     
     

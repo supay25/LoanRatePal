@@ -4,38 +4,36 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-     
+
     <h:head>
         <title>Dashboard</title>
-      
         <link rel="stylesheet" href="https://css.gg/icons/all.css"/>
         <link href='https://unpkg.com/css.gg@2.0.0/icons/css/home.css' rel='stylesheet'/>
         <link href='https://unpkg.com/css.gg@2.0.0/icons/css/briefcase.css' rel='stylesheet'/>
         <link href='https://unpkg.com/css.gg@2.0.0/icons/css/align-bottom.css' rel='stylesheet'/>
         <link href='https://unpkg.com/css.gg@2.0.0/icons/css/browse.css' rel='stylesheet'/>
         <style>
-            .body{
+            .body {
                 background-color: #B0D7FF;
             }
             .container-left {
                 display: flex;
                 justify-content: flex-end;
-                padding: 10px; /* Adjust padding as needed */
+                padding: 10px;
             }
-           
+
             .left-bar {
-                background-color: #2D3142; /* Set the background color to dark blue */
+                background-color: #2D3142;
                 padding: 15px;
                 position: fixed;
                 left: 0;
                 top: 0;
-                z-index: 1; /* Ensure the left bar is in front of other elements */
+                z-index: 1;
                 height: 100vh;
-                width: 15%; /* Fixed width */
+                width: 15%;
                 display: flex;
-                flex-direction: column; /* Stack children vertically */
-              
-                align-items: center; /* Center children horizontally */
+                flex-direction: column;
+                align-items: center;
             }
 
             .left-bar ul {
@@ -43,8 +41,8 @@
                 padding: 0;
                 margin-top: 50%;
                 display: flex;
-                flex-direction: column; /* Stack list items vertically */
-                align-items:flex-start ; /* Center list items horizontally */
+                flex-direction: column;
+                align-items: flex-start;
             }
 
             .left-bar li {
@@ -52,19 +50,34 @@
             }
 
             .left-bar a {
-                color: white; /* Change link color to white */
+                color: white;
                 text-decoration: none;
                 font-size: 16px;
                 display: flex;
-                align-items: center; /* Align items vertically */
+                align-items: center;
             }
 
             .left-bar a i {
-                margin-right: 15px; /* Space between icon and text */
+                margin-right: 15px;
             }
 
             .left-bar a:hover {
-                color: #cccccc; /* Change link color on hover */
+                color: #cccccc;
+            }
+
+            .main-content {
+                margin-left: 17%;
+                padding: 20px;
+            }
+
+            .form-field {
+                margin-bottom: 20px;
+            }
+
+            .search-container {
+                display: flex;
+                align-items: center;
+                gap: 10px;
             }
         </style>
     </h:head>
@@ -74,8 +87,112 @@
                 <li><h:link outcome="Dashboard.xhtml"><i class="gg-home"></i> Dashboard</h:link></li>
                 <li><h:link outcome="Solicitudes.xhtml"><i class="gg-briefcase"></i> Solicitudes</h:link></li>
                 <li><h:link outcome="Planilla.xhtml"><i class="gg-align-bottom"></i> Planilla</h:link></li>
-                <li><h:link outcome="Asistencia.xhtml"><i class="gg-browse"></i> Asistencia</h:link></li>                            
+                <li><h:link outcome="Asistencia.xhtml"><i class="gg-browse"></i> Asistencia</h:link></li>
             </ul>
+        </div>
+
+        <div class="main-content">
+            <h:form>
+                <div class="form-field">
+                    <p:outputLabel for="fechaInicio" value="Fecha de Inicio" />
+                    <p:datePicker id="fechaInicio" value="#{HRController.fechaInicio}" />
+                </div>
+                <div class="form-field">
+                    <p:outputLabel for="fechaFinal" value="Fecha Final" />
+                    <p:datePicker id="fechaFinal" value="#{HRController.fechaFinal}" />
+                </div>
+                <p:commandButton value="Buscar" action="#{HRController.buscarPlanillas()}" styleClass="rounded-button" update=":dataForm:dt-products" />
+            </h:form>
+
+            <h:form id="dataForm">
+                <p:dataTable id="dt-products" widgetVar="dtProducts" var="empleado" value="#{HRController.planilla}"
+                             reflow="true" styleClass="products-table" selection="#{crudView.selectedProducts}"
+                             rowKey="#{empleado.cedula}" paginator="true" rows="10" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <div class="products-table-header">
+                            <span style="font-weight: bold">Planilla</span>
+                            <span class="filter-container ui-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <p:inputText id="globalFilter" onkeyup="PF('dtProducts').filter()" placeholder="Search" />
+                            </span>
+                        </div>
+                    </f:facet>
+
+                    <p:column selectionMode="multiple" exportable="false"></p:column>
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{empleado.nombre}" />
+                    </p:column>
+                    <p:column headerText="Cedula">
+                        <h:outputText value="#{empleado.cedula}" />
+                    </p:column>
+                    <p:column headerText="Salario">
+                        <h:outputText value="#{empleado.salario}" style="font-weight: 700">
+                            <f:convertNumber currencySymbol="$" type="currency" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Dias Trabajados">
+                        <h:outputText value="#{empleado.dias}" />
+                    </p:column>
+                    <p:column headerText="Salario Bruto">
+                        <h:outputText value="#{empleado.salarioBruto}" />
+                    </p:column>
+                    <p:column headerText="Salario Neto">
+                        <h:outputText value="#{empleado.salarioNeto}" />
+                    </p:column>
+                    <p:column exportable="false" ariaHeaderText="Actions">
+                        <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-product-content"
+                                         oncomplete="PF('manageProductDialog').show()"
+                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
+                            <f:setPropertyActionListener value="#{empleado}" target="#{HRController.empleadoSeleccionadoTO}" />
+                            <p:resetInput target=":dialogs:manage-product-content" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="dialogs">
+                <p:dialog header="Product Details" showEffect="fade" modal="true" widgetVar="manageProductDialog"
+                          responsive="true">
+                    <p:outputPanel id="manage-product-content" class="ui-fluid">
+                        <p:outputPanel rendered="#{not empty HRController.empleadoSeleccionadoTO}">
+                            <div class="field">
+                                <p:outputLabel for="name">Name</p:outputLabel>
+                                <p:inputText id="name" value="#{HRController.empleadoSeleccionadoTO.nombre}" required="true" />
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="cedula">Cedula</p:outputLabel>
+                                <p:inputText id="cedula" value="#{HRController.empleadoSeleccionadoTO.cedula}" />
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="DiasTrabajados">Dias Trabajados</p:outputLabel>
+                                <p:inputText id="DiasTrabajados" value="#{HRController.empleadoSeleccionadoTO.dias}" />
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="SalarioNeto">Salario Neto</p:outputLabel>
+                                <p:inputText id="SalarioNeto" value="#{HRController.empleadoSeleccionadoTO.salarioNeto}" />
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="SalarioBruto">Salario Bruto</p:outputLabel>
+                                <p:inputText id="SalarioBruto" value="#{HRController.empleadoSeleccionadoTO.salarioBruto}" />
+                            </div>
+                            
+                        </p:outputPanel>
+                    </p:outputPanel>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Save" icon="pi pi-check" actionListener="#{HRController.guardarNomina()}"
+                                         update="manage-product-content" process="manage-product-content @this"  oncomplete="PF('manageProductDialog').hide()"/>
+                        <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageProductDialog').hide()" 
+                                         class="ui-button-secondary" type="button" />
+                    </f:facet>
+                </p:dialog>
+
+                <p:confirmDialog global="true" showEffect="fade" width="300">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                     icon="pi pi-times" />
+                </p:confirmDialog>
+            </h:form>
         </div>
     </h:body>
 </html>

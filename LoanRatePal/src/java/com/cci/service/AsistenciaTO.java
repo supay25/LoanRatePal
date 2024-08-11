@@ -5,13 +5,15 @@
  */
 package com.cci.service;
 
+import java.util.Date;
+
 /**
  *
  * @author Jose
  */
 public class AsistenciaTO {
     int idasistencia;
-    String fecha;
+    Date fecha;
     int idEmpleado;
     String Status;
     String nombre; 
@@ -20,7 +22,7 @@ public class AsistenciaTO {
     public AsistenciaTO() {
     }
 
-    public AsistenciaTO(int idasistencia, String fecha, int idEmpleado, String Status) {
+    public AsistenciaTO(int idasistencia, Date fecha, int idEmpleado, String Status) {
         this.idasistencia = idasistencia;
         this.fecha = fecha;
         this.idEmpleado = idEmpleado;
@@ -35,11 +37,11 @@ public class AsistenciaTO {
         this.idasistencia = idasistencia;
     }
 
-    public String getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
