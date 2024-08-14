@@ -12,6 +12,8 @@ import java.util.Date;
  *
  * @author Jose
  */
+
+//Atributos
 public class AsistenciaTO implements Serializable{
     int idasistencia;
     Date fecha;
@@ -19,7 +21,8 @@ public class AsistenciaTO implements Serializable{
     String Status;
     String nombre; 
      
-
+    
+//Constructores
     public AsistenciaTO() {
     }
 
@@ -30,6 +33,8 @@ public class AsistenciaTO implements Serializable{
         this.Status = Status;
     }
 
+    
+    //Getters y setters
     public int getIdasistencia() {
         return idasistencia;
     }

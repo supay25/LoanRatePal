@@ -12,6 +12,8 @@ import java.util.Date;
  *
  * @author User
  */
+
+//Atributos
 public class VacacionesTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -20,10 +22,12 @@ public class VacacionesTO implements Serializable {
     private Date fin;
     private String estado;
 
+    
+    //Contrusctores
     public VacacionesTO() {
     }
 
-    //zz
+    //
     public VacacionesTO(int idEmpleado, Date inicio, Date fin, String estado) {
         this.idEmpleado = idEmpleado;
         this.inicio = inicio;
@@ -37,6 +41,8 @@ public class VacacionesTO implements Serializable {
         this.fin = fin;
     }
 
+    
+    //Getters y Setters
     public int getIdEmpleado() {
         return idEmpleado;
     }

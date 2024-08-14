@@ -17,15 +17,18 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class RegistroController implements Serializable {
 
+    //Atributos
     private EmpleadoTO selectedEmpleado;
     private UsuarioTO selectedUsuario;
     private ServicioRegistro servicioRegistro = new ServicioRegistro();
 
+    //Constructores
     public RegistroController() {
         openNewEmpleado();
         openNewUsuario();
     }
 
+    //Funciones
     public void openNewUsuario() {
         this.selectedUsuario = new UsuarioTO();
     }
@@ -42,7 +45,7 @@ public class RegistroController implements Serializable {
         }
     }
 
-    // Getters y Setters de selectedEmpleado y selectedUsuario
+    // Getters y Setters 
     public EmpleadoTO getSelectedEmpleado() {
         return selectedEmpleado;
     }

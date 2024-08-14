@@ -19,6 +19,7 @@ import java.util.List;
 public class ServicioEmpleado  extends Service {
     
     
+    //Busca en la bd el usuario y la contraseña insertada.
      public boolean Ver(String usuario, String clave) {
         EmpleadoTO c = null;
 
@@ -37,25 +38,8 @@ public class ServicioEmpleado  extends Service {
 
         return false;
     }
-     //xd
-   public Integer obtenerPermisoUsuario(String usuario) {
-    try {
-        PreparedStatement stmt = super.getConexion().prepareStatement("SELECT id_acceso FROM usuario WHERE usuario = ?");
-        stmt.setString(1, usuario);
-        ResultSet resultado = stmt.executeQuery();
-
-        if (resultado.next()) {
-            return resultado.getInt("id_acceso");
-        }
-
-        stmt.close();
-    } catch (SQLException ex) {
-        System.out.println("Error al obtener permiso del usuario: " + ex.getMessage());
-    }
-
-    return null;
-}
-
+     
+  //Obtiene el rol del usuario para funciones del controller
     public String obtenerRolUsuario(String usuario) {
     try {
         PreparedStatement stmt = super.getConexion().prepareStatement("SELECT rol FROM usuario WHERE usuario = ?");
@@ -73,6 +57,8 @@ public class ServicioEmpleado  extends Service {
 
     return null;
 }
+    
+    //Obtiene a un empleado por la ID
        public EmpleadoTO obtenerEmpleadoId(int idempleado) {
         EmpleadoTO empleado = null;
         try {
@@ -98,6 +84,8 @@ public class ServicioEmpleado  extends Service {
 
     }
 
+       
+       //obtiene al empleado y por la id del usuario
     public EmpleadoTO obtenerEmpleadoIdPorUsuario(String usuario) {
         EmpleadoTO empleado = null;
         try {
@@ -129,6 +117,7 @@ public class ServicioEmpleado  extends Service {
         return empleado;
     }
 
+    //Actualiza solo el email y el telefono, para los empleados normales
     public boolean actualizarEmpleado(EmpleadoTO empleado) {
         boolean actualizado = false;
         try {
@@ -151,6 +140,7 @@ public class ServicioEmpleado  extends Service {
         return actualizado;
     }
     
+    // Actualiza información que solo el admin puede actualizar
     public boolean actualizarEmpleadoAdmin (EmpleadoTO empleado) {
         boolean actualizado = false;
         try {
@@ -174,6 +164,7 @@ public class ServicioEmpleado  extends Service {
         return actualizado;
     }
     
+    //Guarda las vacaciones
    public boolean guardarVacaciones(VacacionesTO vacaciones) {
     try {
         PreparedStatement stmt = super.getConexion().prepareStatement(
@@ -194,7 +185,7 @@ public class ServicioEmpleado  extends Service {
     }
 }
    
-   
+   // Crea una lista de empleados y también da los roles de estos.
     public List<EmpleadoTO> demeEmpleados() {
 
     List<EmpleadoTO> listaRetorno = new ArrayList<EmpleadoTO>();

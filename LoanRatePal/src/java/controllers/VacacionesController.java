@@ -13,7 +13,7 @@ import java.util.List;
 @ViewScoped
 public class VacacionesController implements Serializable {
 
-    
+    //Atributos
     private int id_em;
     private Date inicio;
     private Date fin;
@@ -23,6 +23,7 @@ public class VacacionesController implements Serializable {
     private List<VacacionesTO> vacaciones;
     private ServicioVacaciones servicio;
 
+    //FUnciones
     public VacacionesController() {
          servicio = new ServicioVacaciones();
         vacaciones = servicio.verVacaciones();
@@ -46,6 +47,7 @@ public class VacacionesController implements Serializable {
         }
     }
 
+    //Getters y setters
     public List<VacacionesTO> getVacaciones() {
         return vacaciones;
     }

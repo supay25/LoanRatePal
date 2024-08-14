@@ -31,7 +31,8 @@ import javax.faces.context.FacesContext;
 @ManagedBean(name = "HRController")
 @SessionScoped
 public class RecursosHumanosController implements Serializable {
-
+//Atributos
+    
     ServicioAsistencia asistencia = new ServicioAsistencia();
     ServicioPlanilla planillaServicio = new ServicioPlanilla();
     ServicioEmpleado servEmpleado = new ServicioEmpleado();
@@ -106,6 +107,7 @@ public class RecursosHumanosController implements Serializable {
         return true;
     }
 
+    //Getters y Setter
     private LocalDate convertToLocalDate(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }

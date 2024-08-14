@@ -12,6 +12,8 @@ import java.util.Date;
  *
  * @author ADMIN
  */
+
+//Atributos
 public class EmpleadoTO implements Serializable {
 
  	int idempleado;
@@ -28,6 +30,8 @@ public class EmpleadoTO implements Serializable {
     Date fechaFin;
     String rol;
     
+    
+    //Constructores
     public EmpleadoTO() {
         
     }
@@ -51,6 +55,8 @@ public class EmpleadoTO implements Serializable {
         this.telefono = telefono;
     }
 
+    
+    //Getter y Setters
     public int getDias() {
         return dias;
     }

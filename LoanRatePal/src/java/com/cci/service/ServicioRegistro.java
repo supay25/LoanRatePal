@@ -7,6 +7,8 @@ import java.sql.SQLException;
 
 public class ServicioRegistro extends Service {
 
+    
+    //Guarda al empleado y al usuario en el bd
     public void guardarEmpleadoYUsuario(EmpleadoTO empleado, UsuarioTO usuario) throws SQLException {
         Connection conn = null;
         PreparedStatement psEmpleado = null;
@@ -38,7 +40,7 @@ public class ServicioRegistro extends Service {
             }
 
             // Insertar en la tabla usuario, asociando el idEmpleado
-            String sqlUsuario = "INSERT INTO usuario (usuario, clave, rol, idEmpleado) VALUES (?, ?, ?, ?)";
+            String sqlUsuario = "INSERT INTO usuario (usuario, clave, rol, id_emple) VALUES (?, ?, ?, ?)";
             psUsuario = conn.prepareStatement(sqlUsuario);
             psUsuario.setString(1, usuario.getUsuario());
             psUsuario.setString(2, usuario.getClave());

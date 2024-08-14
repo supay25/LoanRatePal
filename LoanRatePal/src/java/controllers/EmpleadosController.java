@@ -25,13 +25,14 @@ import javax.faces.context.FacesContext;
 @ViewScoped
 
 public class EmpleadosController implements Serializable {
-
+//Atributos
     ServicioEmpleado servicioEmpleado = new ServicioEmpleado();
     private EmpleadoTO empleado;
     private int idempleado;
     private List<Date> vacaciones;
     private int tiempoTranscurrido;
 
+    //Constructores
     public EmpleadosController() {
 
     }
@@ -45,6 +46,7 @@ public class EmpleadosController implements Serializable {
         }
     }
 
+    //Getters and setters
     public List<Date> getVacaciones() {
         return vacaciones;
     }
@@ -85,14 +87,13 @@ public class EmpleadosController implements Serializable {
         this.idempleado = idempleado;
     }
 
+    //Funciones
     private int obtenerEmpleadoSesion() {
         Integer id = (Integer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("idempleado");
         return id != null ? id : 0;
     }
 
-   
-
-    public void guardarVacaciones() {
+       public void guardarVacaciones() {
         try {
             if (vacaciones != null && vacaciones.size() == 2) {
                 Date inicio = vacaciones.get(0);

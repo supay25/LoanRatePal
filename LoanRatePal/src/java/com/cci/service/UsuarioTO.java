@@ -14,7 +14,7 @@ import javax.faces.bean.ViewScoped;
  * @author natal
  */
 
-
+// Atributos
 public class UsuarioTO implements Serializable {
 
     private int idUsuario;
@@ -23,6 +23,7 @@ public class UsuarioTO implements Serializable {
     private String rol;
     
 
+    // constructor
     public UsuarioTO() {
     }
 
@@ -32,9 +33,9 @@ public class UsuarioTO implements Serializable {
         this.clave = clave;
         this.rol = rol;
 
-    
     }
 
+    // Getters y Setters
     public int getIdUsuario() {
         return idUsuario;
     }

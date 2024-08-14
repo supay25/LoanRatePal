@@ -22,11 +22,12 @@ import org.primefaces.event.RowEditEvent;
 @SessionScoped
 
 public class LoginController implements Serializable {
-
+//atributos
     private String usuario;
     private String clave;
     private int cedula;
 
+    //Constructores
     public LoginController() {
     }
 
@@ -36,6 +37,7 @@ public class LoginController implements Serializable {
         this.cedula = cedula;
     }
 
+    //Getters y setters
     public String getUsuario() {
         return usuario;
     }
@@ -60,6 +62,7 @@ public class LoginController implements Serializable {
         this.cedula = cedula;
     }
 
+    //Funciones
     public void redireccionar(String ruta) {
 
         HttpServletRequest request;
@@ -69,8 +72,7 @@ public class LoginController implements Serializable {
         } catch (Exception e) {
         }
     }
-
-    //ss
+    
     public void ingresar() {
         ServicioEmpleado s = new ServicioEmpleado();
 

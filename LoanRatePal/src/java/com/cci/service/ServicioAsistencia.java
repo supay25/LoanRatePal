@@ -20,8 +20,12 @@ import javax.faces.context.FacesContext;
  *
  * @author Jose
  */
+
+//Funciones
 public class ServicioAsistencia extends Service {
 
+    
+    //Inserta en la tabla de asistencia
     public void insertar(AsistenciaTO asistencia, Date fecha) {
         try {
             if (tiendaExists(fecha, asistencia.getIdEmpleado())) {
@@ -82,6 +86,8 @@ public class ServicioAsistencia extends Service {
         return false;
     }
 
+    
+    //Crea una lista para la Asitencia
     public List<AsistenciaTO> listaAsistencia() {
 
         List<AsistenciaTO> listaRetorno = new ArrayList<>();

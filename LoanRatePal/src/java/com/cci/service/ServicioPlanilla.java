@@ -20,6 +20,7 @@ import javax.faces.context.FacesContext;
  */
 public class ServicioPlanilla extends Service {
 
+    //Crea una lista de las planilla por orden de fechas.
     public List<EmpleadoTO> listaPlanillaa(Date fechaInicio, Date fechaFin) {
         List<EmpleadoTO> retorno = new ArrayList<>();
 
@@ -90,6 +91,8 @@ public class ServicioPlanilla extends Service {
         return retorno;
     }
 
+    
+    //Guarda la nomina
     public void guardar(EmpleadoTO nomina, Date fechaInicio, Date fechaFin) {
         try {
             if (tiendaExists(nomina.getIdempleado(), fechaInicio, fechaFin)) {
@@ -139,6 +142,7 @@ public class ServicioPlanilla extends Service {
         }
     }
 
+    //Busca si la nomina existe
     public boolean tiendaExists(int idEmpleado, Date fechaInicio, Date fechaFin) {
         try {
             PreparedStatement checkStmt = super.getConexion().prepareStatement("SELECT COUNT(*) FROM nomina WHERE fechaInicio = ? and id_empleado = ? and fechaFin = ?");

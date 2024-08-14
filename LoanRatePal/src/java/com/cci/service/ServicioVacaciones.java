@@ -8,6 +8,7 @@ import java.util.List;
 
 public class ServicioVacaciones extends Service {
 
+    // enlista las vacaciones solicitada
     public List<VacacionesTO> verVacaciones() {
         List<VacacionesTO> listaRetorno = new ArrayList<>();
         try {
@@ -37,7 +38,7 @@ public class ServicioVacaciones extends Service {
 
     }
 
-    //zz
+    //Actualiza el estado de la vacación solicitada.
     public void actualizarEstado(int idEmpleado, String nuevoEstado) {
         try {
             PreparedStatement stmt = super.getConexion().prepareStatement(
