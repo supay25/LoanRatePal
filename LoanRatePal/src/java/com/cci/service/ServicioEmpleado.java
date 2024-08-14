@@ -151,6 +151,29 @@ public class ServicioEmpleado  extends Service {
         return actualizado;
     }
     
+    public boolean actualizarEmpleadoAdmin (EmpleadoTO empleado) {
+        boolean actualizado = false;
+        try {
+
+            PreparedStatement stmt = super.getConexion().prepareStatement(
+                    "UPDATE empleado SET email = ?, telefono = ?, estado_laboral = ? WHERE idempleado = ?" );
+            stmt.setString(1, empleado.getEmail());
+            stmt.setInt(2, empleado.getTelefono());
+            stmt.setString(3, empleado.getEstado_laboral());
+            stmt.setInt(4, empleado.getIdempleado());
+
+            int filasActualizadas = stmt.executeUpdate();
+
+            if (filasActualizadas > 0) {
+                actualizado = true;
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al actualizar empleado: " + ex);
+        }
+        return actualizado;
+    }
+    
    public boolean guardarVacaciones(VacacionesTO vacaciones) {
     try {
         PreparedStatement stmt = super.getConexion().prepareStatement(
@@ -170,46 +193,44 @@ public class ServicioEmpleado  extends Service {
         return false;
     }
 }
+   
+   
     public List<EmpleadoTO> demeEmpleados() {
 
-        List<EmpleadoTO> listaRetorno = new ArrayList<EmpleadoTO>();
+    List<EmpleadoTO> listaRetorno = new ArrayList<EmpleadoTO>();
 
-        try {
+    try {
 
-            PreparedStatement stmt = super.getConexion().prepareStatement("SELECT idempleado, cedula, nombre, email, salario, telefono, estado_laboral FROM empleado");
-            ResultSet rs = stmt.executeQuery();
+        PreparedStatement stmt = super.getConexion().prepareStatement(
+            "SELECT e.idempleado, e.cedula, e.nombre, e.email, e.salario, e.telefono, e.estado_laboral, u.rol "
+            + "FROM empleado e "
+            + "INNER JOIN usuario u ON e.idempleado = u.id_emple"
+        );
+        ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()) {
-                
-                // query que retorne la lista de la tarea
-                
-                int idempleado = rs.getInt("idempleado");
-                int cedula = rs.getInt("cedula");
-                String nombre = rs.getString("nombre");
-                String email = rs.getString("email");
-                double salario = rs.getDouble("salario");
-                int telefono = rs.getInt("telefono");
-                String estado_laboral = rs.getString("estado_laboral");
-                
+        while (rs.next()) {
 
-                EmpleadoTO empTO = new EmpleadoTO(idempleado, cedula, nombre, email, salario, telefono, estado_laboral);
-                
-                empTO.setCedula(cedula);
-                empTO.setNombre(nombre);
-                empTO.setEmail(email);
-                empTO.setSalario(salario);
-                empTO.setTelefono(telefono);
-                empTO.setEstado_laboral(estado_laboral);
-                listaRetorno.add(empTO);
+            int idempleado = rs.getInt("idempleado");
+            int cedula = rs.getInt("cedula");
+            String nombre = rs.getString("nombre");
+            String email = rs.getString("email");
+            double salario = rs.getDouble("salario");
+            int telefono = rs.getInt("telefono");
+            String estado_laboral = rs.getString("estado_laboral");
+            String rol = rs.getString("rol");
 
-            }
-            rs.close();
-            stmt.close();
-            //super.getConexion().close();
-        } catch (SQLException ex) {
-            //System.out.println("Error al abrir Conexión: " + ex.getMessage());
-            ex.printStackTrace();
+            EmpleadoTO empTO = new EmpleadoTO(idempleado, cedula, nombre, email, salario, telefono, estado_laboral);
+            empTO.setRol(rol);  // Asegúrate de que EmpleadoTO tenga un método para establecer el rol
+
+            listaRetorno.add(empTO);
+
         }
-        return listaRetorno;
+        rs.close();
+        stmt.close();
+    } catch (SQLException ex) {
+        ex.printStackTrace();
     }
+    return listaRetorno;
+}
+
 }

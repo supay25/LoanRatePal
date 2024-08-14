@@ -60,6 +60,11 @@ public class RecursosHumanosController implements Serializable {
         // this.empleados = asistencia.listaAsistencia();
 
     }
+    
+    public void guardarEmpleadoAdmin(){
+        
+        servEmpleado.actualizarEmpleadoAdmin(this.empleadoSeleccionadoTO);
+    }
 
     public void buscarPlanillas() {
         if (!isDateRangeValid()) {

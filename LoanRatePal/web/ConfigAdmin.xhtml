@@ -139,12 +139,12 @@
                                 <h:outputText value="#{empleado.nombre}" />
                             </p:column>
                             <p:column headerText="Departamento">
-                                <h:outputText value="#{empleado.cedula}" />
+                                <h:outputText value="#{empleado.rol}" />
                             </p:column>
-                            <p:column headerText="Image" exportable="false">
-                                <p:graphicImage name="images/product/#{empleado.email}" library="demo" styleClass="product-image" />
+                            <p:column headerText="Correo" >
+                                <h:outputText value="#{empleado.email}" />
                             </p:column>               
-                            <p:column headerText="Status">
+                            <p:column headerText="Estado Laboral">
                                 <h:outputText value="#{empleado.estado_laboral}" />
                             </p:column>
 
@@ -219,8 +219,20 @@
                         <p:outputPanel rendered="#{not empty HRController.empleadoSeleccionadoTO}">
                             <div class="field">
                                 <p:outputLabel for="name">Nombre</p:outputLabel>
-                                <p:inputText id="name" value="#{HRController.empleadoSeleccionadoTO.nombre}" required="true" readonly="true"/>
+                                <p:inputText id="name" value="#{HRController.empleadoSeleccionadoTO.nombre}" />
                             </div>
+                            
+                            <div class="field">
+                                <p:outputLabel for="correo2">correo</p:outputLabel>
+                                <p:inputText id="correo2" value="#{HRController.empleadoSeleccionadoTO.email}" />
+                            </div>
+                        
+                            <div class="field">
+                                <p:outputLabel for="telefono">telefono</p:outputLabel>
+                                <p:inputText id="telefono2" value="#{HRController.empleadoSeleccionadoTO.telefono}" />
+                            </div>
+                            
+                            
                             <div class="field">
                                 <p:outputLabel for="status">Estado</p:outputLabel>
                                 <p:selectOneRadio id="status" value="#{HRController.empleadoSeleccionadoTO.estado_laboral}"
@@ -232,7 +244,7 @@
                         </p:outputPanel>
                     </p:outputPanel>
                     <f:facet name="footer">
-                        <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{HRController.guardarAsistencia()}"
+                        <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{HRController.guardarEmpleadoAdmin()}"
                                          update=":dialogs:manageProductContent :formListaEmpleados:dtProducts" process="manageProductContent @this" oncomplete="PF('manageProductDialog').hide()" />
                         <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
                                          class="ui-button-secondary" type="button" />
