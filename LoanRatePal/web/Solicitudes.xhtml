@@ -4,25 +4,21 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-     
+
     <h:head>
-        <title>Dashboard</title>
-      
-        
+        <title>Solicitudes de Vacaciones</title>
         <link href='https://unpkg.com/css.gg@2.0.0/icons/css/home.css' rel='stylesheet'/>
         <link href='https://unpkg.com/css.gg@2.0.0/icons/css/briefcase.css' rel='stylesheet'/>
         <link href='https://unpkg.com/css.gg@2.0.0/icons/css/align-bottom.css' rel='stylesheet'/>
         <link href='https://unpkg.com/css.gg@2.0.0/icons/css/browse.css' rel='stylesheet'/>
         <style>
-            .body{
+            .body {
                 background-color: #B0D7FF;
             }
-            .container-left {
+            .container {
                 display: flex;
-                justify-content: flex-end;
-                padding: 10px; /* Adjust padding as needed */
+                height: 100vh;
             }
-           
             .left-bar {
                 background-color: #2D3142; /* Set the background color to dark blue */
                 padding: 15px;
@@ -34,17 +30,17 @@
                 width: 15%; /* Fixed width */
                 display: flex;
                 flex-direction: column; /* Stack children vertically */
-              
                 align-items: center; /* Center children horizontally */
+                overflow-y: auto; /* Ensure content is scrollable if too long */
             }
 
             .left-bar ul {
                 list-style-type: none;
                 padding: 0;
-                margin-top: 50%;
+                margin-top: 20px;
                 display: flex;
                 flex-direction: column; /* Stack list items vertically */
-                align-items:flex-start ; /* Center list items horizontally */
+                align-items: flex-start; /* Align list items to the start */
             }
 
             .left-bar li {
@@ -66,18 +62,86 @@
             .left-bar a:hover {
                 color: #cccccc; /* Change link color on hover */
             }
+
+            .content {
+                margin-left: 15%; /* Leave space for the sidebar */
+                padding: 20px;
+                flex-grow: 1; /* Allow content to grow and fill the space */
+            }
+
+            .dialog-panel-grid {
+                padding: 10px; /* Adjust spacing as needed */
+                gap: 10px; /* Space between items */
+            }
         </style>
     </h:head>
     <h:body>
-        <div class="left-bar">
-            <ul>
-                <li><h:link outcome="Dashboard.xhtml"><i class="gg-home"></i> Dashboard</h:link></li>
-                <li><h:link outcome="Solicitudes.xhtml"><i class="gg-briefcase"></i> Solicitudes</h:link></li>
-                <li><h:link outcome="Planilla.xhtml"><i class="gg-align-bottom"></i> Planilla</h:link></li>
-                <li><h:link outcome="Asistencia.xhtml"><i class="gg-browse"></i> Asistencia</h:link></li>                            
-            </ul>
-            
+        <div class="container">
+            <div class="left-bar">
+                <ul>
+                    <li><h:link outcome="Dashboard.xhtml"><i class="gg-home"></i> Dashboard</h:link></li>
+                    <li><h:link outcome="Solicitudes.xhtml"><i class="gg-briefcase"></i> Solicitudes</h:link></li>
+                    <li><h:link outcome="Planilla.xhtml"><i class="gg-align-bottom"></i> Planilla</h:link></li>
+                    <li><h:link outcome="Asistencia.xhtml"><i class="gg-browse"></i> Asistencia</h:link></li>                            
+                </ul>
+                
+            </div>
+            <div class="content">
+                <h:form id="vacacionesForm">
+                    <p:dataTable id="vacacionesTable" value="#{vacacionesController.vacaciones}" var="vacacion" 
+                                 style="width: 100%" 
+                                 paginator="true" 
+                                 rows="10">
+                        <p:column headerText="ID Empleado">
+                            <h:outputText value="#{vacacion.idEmpleado}" />
+                        </p:column>
+                        <p:column headerText="Inicio">
+                            <h:outputText value="#{vacacion.inicio}" />
+                        </p:column>
+                        <p:column headerText="Fin">
+                            <h:outputText value="#{vacacion.fin}" />
+                        </p:column>
+                        <p:column headerText="Estado">
+                            <h:outputText value="#{vacacion.estado}" />                          
+                        </p:column>
+                        <p:column exportable="false" ariaHeaderText="Actions">
+                            <p:commandButton icon="pi pi-pencil"
+                                             update=":vacacionesForm:dialogContent"
+                                             oncomplete="PF('manageVacacionesDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-success"
+                                             process="@this">
+                                <f:setPropertyActionListener value="#{vacacion}" target="#{vacacionesController.selectVacaciones}" />
+                                <p:resetInput target=":vacacionesForm:dialogContent" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                    <!-- Dialogo para  zzz   editar estado -->
+                    <p:dialog header="Editar estado"
+                              widgetVar="manageVacacionesDialog"
+                              modal="true"
+                              showEffect="fade"
+                              responsive="true"
+                              id="manageVacacionesDialog">
+                        <h:panelGroup id="dialogContent">
+                            <p:selectOneMenu id="estadoSelect"
+                                             value="#{vacacionesController.selectVacaciones.estado}"
+                                             required="true"
+                                             requiredMessage="Estado requerido">
+                                <f:selectItem itemLabel="Aprobado" itemValue="Aprobado" />
+                                <f:selectItem itemLabel="Denegado" itemValue="Denegado" />
+                            </p:selectOneMenu>
+
+                            <p:commandButton value="Actualizar Estado"
+                                             actionListener="#{vacacionesController.saveEstado()}"
+                                             update=":vacacionesForm:vacacionesTable :vacacionesForm:dialogContent"
+                                             oncomplete="PF('manageVacacionesDialog').hide()"
+                                             styleClass="ui-button-success">
+                            </p:commandButton>
+                        </h:panelGroup>
+                    </p:dialog>
+                </h:form>
+            </div>
         </div>
-       
     </h:body>
 </html>
