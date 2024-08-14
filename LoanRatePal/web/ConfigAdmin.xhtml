@@ -117,9 +117,9 @@
 
                 <div class="listaempleados">
                     <h:form id="formListaEmpleados">
-                        <p:dataTable id="dtProducts" widgetVar="dtProducts" var="empleado" value="#{HRController.empleados}"
-                                     reflow="true" styleClass="products-table" selection="#{HRController.empleadoSeleccionado}"
-                                     rowKey="#{empleado.idEmpleado}" paginator="true" rows="10" paginatorPosition="bottom">
+                        <p:dataTable id="dtProducts" widgetVar="dtProducts" var="empleado" value="#{HRController.lstEmpleados}"
+                                     reflow="true" styleClass="products-table" selection="#{HRController.empleadoSeleccionadoTO}"
+                                     rowKey="#{empleado.idempleado}" paginator="true" rows="10" paginatorPosition="bottom">
                             <f:facet name="header">
                                 <div class="products-table-header">
                                     <span style="font-weight: bold">Empleados</span>
@@ -139,20 +139,20 @@
                                 <h:outputText value="#{empleado.nombre}" />
                             </p:column>
                             <p:column headerText="Departamento">
-                                <h:outputText value="#{empleado.idEmpleado}" />
+                                <h:outputText value="#{empleado.cedula}" />
                             </p:column>
                             <p:column headerText="Image" exportable="false">
-                                <p:graphicImage name="images/product/#{empleado.status}" library="demo" styleClass="product-image" />
+                                <p:graphicImage name="images/product/#{empleado.email}" library="demo" styleClass="product-image" />
                             </p:column>               
                             <p:column headerText="Status">
-                                <h:outputText value="#{empleado.status}" />
+                                <h:outputText value="#{empleado.estado_laboral}" />
                             </p:column>
 
                             <p:column exportable="false" ariaHeaderText="Acciones">
                                 <p:commandButton icon="pi pi-pencil" update=":dialogs:manageProductContent"
                                                  oncomplete="PF('manageProductDialog').show()"
                                                  styleClass="edit-button rounded-button ui-button-success" process="@this">
-                                    <f:setPropertyActionListener value="#{empleado}" target="#{HRController.empleadoSeleccionado}" />
+                                    <f:setPropertyActionListener value="#{empleado}" target="#{HRController.empleadoSeleccionadoTO}" />
                                     <p:resetInput target=":dialogs:manageProductContent" />
                                 </p:commandButton>
                             </p:column>
@@ -216,17 +216,17 @@
 
                 <p:dialog header="Detalles del Empleado" showEffect="fade" modal="true" widgetVar="manageProductDialog" responsive="true">
                     <p:outputPanel id="manageProductContent" class="ui-fluid">
-                        <p:outputPanel rendered="#{not empty HRController.empleadoSeleccionado}">
+                        <p:outputPanel rendered="#{not empty HRController.empleadoSeleccionadoTO}">
                             <div class="field">
                                 <p:outputLabel for="name">Nombre</p:outputLabel>
-                                <p:inputText id="name" value="#{HRController.empleadoSeleccionado.nombre}" required="true" readonly="true"/>
+                                <p:inputText id="name" value="#{HRController.empleadoSeleccionadoTO.nombre}" required="true" readonly="true"/>
                             </div>
                             <div class="field">
                                 <p:outputLabel for="status">Estado</p:outputLabel>
-                                <p:selectOneRadio id="status" value="#{HRController.empleadoSeleccionado.status}"
+                                <p:selectOneRadio id="status" value="#{HRController.empleadoSeleccionadoTO.estado_laboral}"
                                                   layout="responsive" columns="2">
-                                    <f:selectItem itemLabel="Presente" itemValue="Presente" />
-                                    <f:selectItem itemLabel="Ausente" itemValue="Ausente" />
+                                    <f:selectItem itemLabel="Activo" itemValue="Activo" />
+                                    <f:selectItem itemLabel="Inactivos" itemValue="Inactivos" />
                                 </p:selectOneRadio>
                             </div>
                         </p:outputPanel>
