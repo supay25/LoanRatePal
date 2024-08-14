@@ -14,22 +14,34 @@ import java.util.Date;
  */
 public class EmpleadoTO implements Serializable {
 
-    int idempleado;
+ 	int idempleado;
     int cedula;
     String nombre;
     String email;
     double salario;
     int telefono;
     int dias;
+    String estado_laboral;
     double salarioBruto;
     double salarioNeto;
     Date fechaIncio;
     Date fechaFin;
+    String rol;
     
     public EmpleadoTO() {
         
     }
 
+    public EmpleadoTO(int idempleado, int cedula, String nombre, String email, double salario, int telefono, String estado_laboral) {
+        this.idempleado = idempleado;
+        this.cedula = cedula;
+        this.nombre = nombre;
+        this.email = email;
+        this.salario = salario;
+        this.telefono = telefono;
+        this.estado_laboral = estado_laboral;
+    }
+    
     public EmpleadoTO(int idempleado, int cedula, String nombre, String email, double salario, int telefono) {
         this.idempleado = idempleado;
         this.cedula = cedula;
@@ -80,9 +92,6 @@ public class EmpleadoTO implements Serializable {
     }
   
     
-
-    
-    
     public int getIdempleado() {
         return idempleado;
     }
@@ -130,6 +139,23 @@ public class EmpleadoTO implements Serializable {
     public void setTelefono(int telefono) {
         this.telefono = telefono;
     }
+
+    public String getEstado_laboral() {
+        return estado_laboral;
+    }
+
+    public void setEstado_laboral(String estado_laboral) {
+        this.estado_laboral = estado_laboral;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+    
 
   
 }

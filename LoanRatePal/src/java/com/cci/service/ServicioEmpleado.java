@@ -8,7 +8,9 @@ package com.cci.service;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -168,5 +170,46 @@ public class ServicioEmpleado  extends Service {
         return false;
     }
 }
-    
+    public List<EmpleadoTO> demeEmpleados() {
+
+        List<EmpleadoTO> listaRetorno = new ArrayList<EmpleadoTO>();
+
+        try {
+
+            PreparedStatement stmt = super.getConexion().prepareStatement("SELECT idempleado, cedula, nombre, email, salario, telefono, estado_laboral FROM empleado");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                
+                // query que retorne la lista de la tarea
+                
+                int idempleado = rs.getInt("idempleado");
+                int cedula = rs.getInt("cedula");
+                String nombre = rs.getString("nombre");
+                String email = rs.getString("email");
+                double salario = rs.getDouble("salario");
+                int telefono = rs.getInt("telefono");
+                String estado_laboral = rs.getString("estado_laboral");
+                
+
+                EmpleadoTO empTO = new EmpleadoTO(idempleado, cedula, nombre, email, salario, telefono, estado_laboral);
+                
+                empTO.setCedula(cedula);
+                empTO.setNombre(nombre);
+                empTO.setEmail(email);
+                empTO.setSalario(salario);
+                empTO.setTelefono(telefono);
+                empTO.setEstado_laboral(estado_laboral);
+                listaRetorno.add(empTO);
+
+            }
+            rs.close();
+            stmt.close();
+            //super.getConexion().close();
+        } catch (SQLException ex) {
+            //System.out.println("Error al abrir Conexión: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return listaRetorno;
+    }
 }

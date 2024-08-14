@@ -8,6 +8,7 @@ package controllers;
 import com.cci.service.AsistenciaTO;
 import com.cci.service.EmpleadoTO;
 import com.cci.service.ServicioAsistencia;
+import com.cci.service.ServicioEmpleado;
 import com.cci.service.ServicioPlanilla;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -29,53 +30,55 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean(name = "HRController")
 @SessionScoped
-public class RecursosHumanosController implements Serializable{
-    
+public class RecursosHumanosController implements Serializable {
+
     ServicioAsistencia asistencia = new ServicioAsistencia();
     ServicioPlanilla planillaServicio = new ServicioPlanilla();
+    ServicioEmpleado servEmpleado = new ServicioEmpleado();
     private List<AsistenciaTO> empleados = asistencia.listaAsistencia();
-    private AsistenciaTO empleadoSeleccionado;
+    private List<EmpleadoTO> lstEmpleados = servEmpleado.demeEmpleados();
     private Date currentDate;
-    private SimpleDateFormat sdf;   
+    private SimpleDateFormat sdf;
     private List<EmpleadoTO> planilla;
     private EmpleadoTO empleadoSeleccionadoTO;
     private Date fechaInicio;
     private Date fechaFinal;
-   
+    private AsistenciaTO empleadoSeleccionado;
+
     public RecursosHumanosController() {
         currentDate = new Date();
     }
-    
+
     public String getFormattedDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("d'/'MMMM '/'yyyy", new Locale("es", "ES"));                
+        SimpleDateFormat sdf = new SimpleDateFormat("d'/'MMMM '/'yyyy", new Locale("es", "ES"));
         return sdf.format(currentDate);
     }
-    
+
     public void guardarAsistencia() {
-  
+
         asistencia.insertar(this.empleadoSeleccionado, currentDate);
-       // this.empleados = asistencia.listaAsistencia();
-               
+        // this.empleados = asistencia.listaAsistencia();
+
     }
-    public void buscarPlanillas(){
+
+    public void buscarPlanillas() {
         if (!isDateRangeValid()) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                                                "Invalid Date Range", 
-                                                "Fecha de Inicio must be 1st or 15th, and Fecha Final must be 15th or the last day of the month.");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Invalid Date Range",
+                    "Fecha de Inicio must be 1st or 15th, and Fecha Final must be 15th or the last day of the month.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return; // Stop further processing
-        }   
-        
+        }
+
         this.planilla = planillaServicio.listaPlanillaa(fechaInicio, fechaFinal);
     }
-    public void guardarNomina(){
-           
-            planillaServicio.guardar(this.empleadoSeleccionadoTO,fechaInicio,fechaFinal);
-        
-        
-        
+
+    public void guardarNomina() {
+
+        planillaServicio.guardar(this.empleadoSeleccionadoTO, fechaInicio, fechaFinal);
+
     }
-    
+
     private boolean isDateRangeValid() {
         if (fechaInicio == null || fechaFinal == null) {
             return false;
@@ -97,9 +100,11 @@ public class RecursosHumanosController implements Serializable{
 
         return true;
     }
+
     private LocalDate convertToLocalDate(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
+
     public Date getFechaInicio() {
         return fechaInicio;
     }
@@ -115,11 +120,6 @@ public class RecursosHumanosController implements Serializable{
     public void setFechaFinal(Date fechaFinal) {
         this.fechaFinal = fechaFinal;
     }
-    
-
-    
-    
-    
 
     public EmpleadoTO getEmpleadoSeleccionadoTO() {
         return empleadoSeleccionadoTO;
@@ -128,10 +128,9 @@ public class RecursosHumanosController implements Serializable{
     public void setEmpleadoSeleccionadoTO(EmpleadoTO empleadoSeleccionadoTO) {
         this.empleadoSeleccionadoTO = empleadoSeleccionadoTO;
     }
-    
 
     public List<AsistenciaTO> getEmpleados() {
-        
+
         return empleados;
     }
 
@@ -146,7 +145,6 @@ public class RecursosHumanosController implements Serializable{
     public void setEmpleadoSeleccionado(AsistenciaTO empleadoSeleccionado) {
         this.empleadoSeleccionado = empleadoSeleccionado;
     }
-    
 
     public Date getCurrentDate() {
         return currentDate;
@@ -163,7 +161,23 @@ public class RecursosHumanosController implements Serializable{
     public void setPlanilla(List<EmpleadoTO> planilla) {
         this.planilla = planilla;
     }
+
+    public ServicioEmpleado getServEmpleado() {
+        return servEmpleado;
+    }
+
+    public void setServEmpleado(ServicioEmpleado servEmpleado) {
+        this.servEmpleado = servEmpleado;
+    }
+
+    public List<EmpleadoTO> getLstEmpleados() {
+        return lstEmpleados;
+    }
+
+    public void setLstEmpleados(List<EmpleadoTO> lstEmpleados) {
+        this.lstEmpleados = lstEmpleados;
+    }
     
-  
     
+
 }
