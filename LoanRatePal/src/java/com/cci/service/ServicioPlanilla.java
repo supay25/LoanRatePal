@@ -23,65 +23,66 @@ public class ServicioPlanilla extends Service {
     public List<EmpleadoTO> listaPlanillaa(Date fechaInicio, Date fechaFin) {
         List<EmpleadoTO> retorno = new ArrayList<>();
 
-        // Query to retrieve employees and count of days they were present within the specified date range
-        String query = "SELECT \n"
-                + "    e.idEmpleado, \n"
-                + "    e.cedula, \n"
-                + "    e.nombre, \n"
-                + "    e.salario,\n"
-                + "    COUNT(CASE \n"
-                + "            WHEN a.status = 'Presente' AND a.fecha BETWEEN ? AND ? \n"
-                + "            THEN 1 \n"
-                + "            ELSE NULL \n"
-                + "         END) AS diasPresente,\n"
-                + "    (e.salario / DAY(LAST_DAY(?))) * \n"
-                + "    COUNT(CASE \n"
-                + "            WHEN a.status = 'Presente' AND a.fecha BETWEEN ? AND ? \n"
-                + "            THEN 1 \n"
-                + "            ELSE NULL \n"
-                + "         END) AS salarioNetoBruto,\n"
-                + "    ((e.salario / DAY(LAST_DAY(?))) * \n"
-                + "    COUNT(CASE \n"
-                + "            WHEN a.status = 'Presente' AND a.fecha BETWEEN ? AND ? \n"
-                + "            THEN 1 \n"
-                + "            ELSE NULL \n"
-                + "         END)) * 0.87 AS salarioNeto\n"
-                + "FROM \n"
-                + "    loanratepal.empleado e\n"
-                + "LEFT JOIN \n"
-                + "    loanratepal.asistencia a \n"
-                + "ON \n"
-                + "    e.idEmpleado = a.idEmpleado\n"
-                + "GROUP BY \n"
-                + "    e.idEmpleado, \n"
-                + "    e.cedula, \n"
-                + "    e.nombre, \n"
-                + "    e.salario;";
+        // Query to retrieve employees from 'nomina' table
+        String sql2 = "SELECT n.salarioneto, n.salarioBruto, n.diasTrabajados, e.cedula, e.nombre "
+                + "FROM nomina n "
+                + "JOIN empleado e ON e.idempleado = n.id_empleado "
+                + "WHERE n.fechaInicio = ? AND n.fechaFin = ?";
 
-        try (PreparedStatement stmt = super.getConexion().prepareStatement(query)) {
-            stmt.setDate(1, new java.sql.Date(fechaInicio.getTime()));
-            stmt.setDate(2, new java.sql.Date(fechaFin.getTime()));
-            stmt.setDate(3, new java.sql.Date(fechaFin.getTime())); // For LAST_DAY
-            stmt.setDate(4, new java.sql.Date(fechaInicio.getTime()));
-            stmt.setDate(5, new java.sql.Date(fechaFin.getTime()));
-            stmt.setDate(6, new java.sql.Date(fechaFin.getTime())); // For LAST_DAY
-            stmt.setDate(7, new java.sql.Date(fechaInicio.getTime()));
-            stmt.setDate(8, new java.sql.Date(fechaFin.getTime()));
+        // Query to retrieve employees and count of days they were present
+        String query = "SELECT e.idEmpleado, e.cedula, e.nombre, e.salario, "
+                + "COUNT(CASE WHEN a.status = 'Presente' AND a.fecha BETWEEN ? AND ? THEN 1 END) AS diasPresente, "
+                + "(e.salario / DAY(LAST_DAY(?))) * COUNT(CASE WHEN a.status = 'Presente' AND a.fecha BETWEEN ? AND ? THEN 1 END) AS salarioNetoBruto, "
+                + "((e.salario / DAY(LAST_DAY(?))) * COUNT(CASE WHEN a.status = 'Presente' AND a.fecha BETWEEN ? AND ? THEN 1 END)) * 0.87 AS salarioNeto "
+                + "FROM empleado e "
+                + "LEFT JOIN asistencia a ON e.idEmpleado = a.idEmpleado "
+                + "GROUP BY e.idEmpleado, e.cedula, e.nombre, e.salario";
 
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    EmpleadoTO empleado = new EmpleadoTO();
-                    empleado.setIdempleado(rs.getInt("idEmpleado"));
-                    empleado.setCedula(rs.getInt("cedula"));
-                    empleado.setNombre(rs.getString("nombre"));
-                    empleado.setSalario(rs.getDouble("salario"));
-                    empleado.setDias(rs.getInt("diasPresente"));
-                    empleado.setSalarioBruto(rs.getInt("salarioNetoBruto"));
-                    empleado.setSalarioNeto(rs.getInt("salarioNeto"));
+        try (PreparedStatement stmt2 = super.getConexion().prepareStatement(sql2)) {
+            stmt2.setDate(1, new java.sql.Date(fechaInicio.getTime()));
+            stmt2.setDate(2, new java.sql.Date(fechaFin.getTime()));
 
-                    retorno.add(empleado);
+            try (ResultSet rs2 = stmt2.executeQuery()) {
+                while (rs2.next()) {
+                    EmpleadoTO objetoLista = new EmpleadoTO();
+                    objetoLista.setNombre(rs2.getString("nombre"));
+                    objetoLista.setSalarioNeto(rs2.getInt("salarioneto"));
+                    objetoLista.setSalarioBruto(rs2.getInt("salarioBruto"));
+                    objetoLista.setCedula(rs2.getInt("cedula"));
+                    objetoLista.setDias(rs2.getInt("diasTrabajados"));
+                    retorno.add(objetoLista);
                 }
             }
+
+            // If no data was found in the first query, use the second query
+            if (retorno.isEmpty()) {
+                try (PreparedStatement stmt = super.getConexion().prepareStatement(query)) {
+                    stmt.setDate(1, new java.sql.Date(fechaInicio.getTime()));
+                    stmt.setDate(2, new java.sql.Date(fechaFin.getTime()));
+                    stmt.setDate(3, new java.sql.Date(fechaFin.getTime())); // For LAST_DAY
+                    stmt.setDate(4, new java.sql.Date(fechaInicio.getTime()));
+                    stmt.setDate(5, new java.sql.Date(fechaFin.getTime()));
+                    stmt.setDate(6, new java.sql.Date(fechaFin.getTime())); // For LAST_DAY
+                    stmt.setDate(7, new java.sql.Date(fechaInicio.getTime()));
+                    stmt.setDate(8, new java.sql.Date(fechaFin.getTime()));
+
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        while (rs.next()) {
+                            EmpleadoTO empleado = new EmpleadoTO();
+                            empleado.setIdempleado(rs.getInt("idEmpleado"));
+                            empleado.setCedula(rs.getInt("cedula"));
+                            empleado.setNombre(rs.getString("nombre"));
+                            empleado.setSalario(rs.getDouble("salario"));
+                            empleado.setDias(rs.getInt("diasPresente"));
+                            empleado.setSalarioBruto(rs.getDouble("salarioNetoBruto"));
+                            empleado.setSalarioNeto(rs.getDouble("salarioNeto"));
+
+                            retorno.add(empleado);
+                        }
+                    }
+                }
+            }
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -89,7 +90,7 @@ public class ServicioPlanilla extends Service {
         return retorno;
     }
 
-    public void guardar(EmpleadoTO nomina,Date fechaInicio, Date fechaFin) {
+    public void guardar(EmpleadoTO nomina, Date fechaInicio, Date fechaFin) {
         try {
             if (tiendaExists(nomina.getIdempleado(), fechaInicio, fechaFin)) {
                 //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al insertar usuario", "Hubo un error al insertar el usuario"));
@@ -99,9 +100,9 @@ public class ServicioPlanilla extends Service {
 
                 stmt.setInt(1, nomina.getDias());
                 stmt.setInt(2, (int) nomina.getSalarioNeto());
-                stmt.setInt(3,(int) nomina.getSalarioBruto());
+                stmt.setInt(3, (int) nomina.getSalarioBruto());
                 stmt.setDate(4, new java.sql.Date(fechaInicio.getTime()));
-                stmt.setInt(5,(int) nomina.getIdempleado());
+                stmt.setInt(5, (int) nomina.getIdempleado());
                 stmt.setDate(6, new java.sql.Date(fechaFin.getTime()));
                 stmt.execute();
 
@@ -116,14 +117,13 @@ public class ServicioPlanilla extends Service {
                     PreparedStatement stmt = super.getConexion().prepareStatement("INSERT INTO nomina (id_empleado,salarioneto,fechaInicio,salarioBruto,diasTrabajados,fechaFin) VALUES (?,?,?,?,?,?)");
                     //stmt.setInt(1, userTO.getId());
 
-                    
                     stmt.setInt(1, (int) nomina.getIdempleado());
                     stmt.setInt(2, (int) nomina.getSalarioNeto());
-                    stmt.setDate(3, new java.sql.Date(fechaInicio.getTime()));                   
+                    stmt.setDate(3, new java.sql.Date(fechaInicio.getTime()));
                     stmt.setInt(4, (int) nomina.getSalarioBruto());
                     stmt.setInt(5, (int) nomina.getDias());
                     stmt.setDate(6, new java.sql.Date(fechaFin.getTime()));
-                    
+
                     stmt.execute();
 
                     stmt.close();
@@ -156,4 +156,5 @@ public class ServicioPlanilla extends Service {
         }
         return false;
     }
+
 }

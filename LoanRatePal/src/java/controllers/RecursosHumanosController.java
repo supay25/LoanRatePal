@@ -10,12 +10,17 @@ import com.cci.service.EmpleadoTO;
 import com.cci.service.ServicioAsistencia;
 import com.cci.service.ServicioPlanilla;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -35,8 +40,7 @@ public class RecursosHumanosController {
     private EmpleadoTO empleadoSeleccionadoTO;
     private Date fechaInicio;
     private Date fechaFinal;
-    
-    
+   
     public RecursosHumanosController() {
         currentDate = new Date();
     }
@@ -53,13 +57,47 @@ public class RecursosHumanosController {
                
     }
     public void buscarPlanillas(){
+        if (!isDateRangeValid()) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                                                "Invalid Date Range", 
+                                                "Fecha de Inicio must be 1st or 15th, and Fecha Final must be 15th or the last day of the month.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return; // Stop further processing
+        }   
         
         this.planilla = planillaServicio.listaPlanillaa(fechaInicio, fechaFinal);
     }
     public void guardarNomina(){
+           
+            planillaServicio.guardar(this.empleadoSeleccionadoTO,fechaInicio,fechaFinal);
         
-        planillaServicio.guardar(this.empleadoSeleccionadoTO,fechaInicio,fechaFinal);
         
+        
+    }
+    
+    private boolean isDateRangeValid() {
+        if (fechaInicio == null || fechaFinal == null) {
+            return false;
+        }
+
+        LocalDate startDate = convertToLocalDate(fechaInicio);
+        LocalDate endDate = convertToLocalDate(fechaFinal);
+
+        // Validate fechaInicio is either 1st or 15th
+        if (startDate.getDayOfMonth() != 1 && startDate.getDayOfMonth() != 15) {
+            return false;
+        }
+
+        // Validate fechaFinal is either 15th or the last day of the month
+        int lastDayOfMonth = endDate.lengthOfMonth();
+        if (endDate.getDayOfMonth() != 16 && endDate.getDayOfMonth() != lastDayOfMonth) {
+            return false;
+        }
+
+        return true;
+    }
+    private LocalDate convertToLocalDate(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
     public Date getFechaInicio() {
         return fechaInicio;
@@ -125,6 +163,6 @@ public class RecursosHumanosController {
         this.planilla = planilla;
     }
     
-    
+  
     
 }
