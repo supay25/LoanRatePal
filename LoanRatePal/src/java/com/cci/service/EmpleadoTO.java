@@ -5,13 +5,14 @@
  */
 package com.cci.service;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author ADMIN
  */
-public class EmpleadoTO {
+public class EmpleadoTO implements Serializable {
 
     int idempleado;
     int cedula;

@@ -5,6 +5,7 @@
  */
 package com.cci.service;
 
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -14,7 +15,7 @@ import javax.faces.bean.ViewScoped;
  */
 
 
-public class UsuarioTO {
+public class UsuarioTO implements Serializable {
 
     private int idUsuario;
     private String usuario;

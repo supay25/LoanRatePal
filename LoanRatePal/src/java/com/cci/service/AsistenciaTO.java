@@ -5,13 +5,14 @@
  */
 package com.cci.service;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author Jose
  */
-public class AsistenciaTO {
+public class AsistenciaTO implements Serializable{
     int idasistencia;
     Date fecha;
     int idEmpleado;

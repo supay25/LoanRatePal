@@ -5,16 +5,31 @@
  */
 package com.cci.service;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author User
  */
-public class VacacionesTO {
+public class VacacionesTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private int idEmpleado;
     private Date inicio;
     private Date fin;
+    private String estado;
+
+    public VacacionesTO() {
+    }
+
+    //zz
+    public VacacionesTO(int idEmpleado, Date inicio, Date fin, String estado) {
+        this.idEmpleado = idEmpleado;
+        this.inicio = inicio;
+        this.fin = fin;
+        this.estado = estado;
+    }
 
     public VacacionesTO(int idEmpleado, Date inicio, Date fin) {
         this.idEmpleado = idEmpleado;
@@ -45,6 +60,13 @@ public class VacacionesTO {
     public void setFin(Date fin) {
         this.fin = fin;
     }
-    
-    
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
 }

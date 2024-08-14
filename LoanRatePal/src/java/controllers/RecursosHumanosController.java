@@ -9,6 +9,7 @@ import com.cci.service.AsistenciaTO;
 import com.cci.service.EmpleadoTO;
 import com.cci.service.ServicioAsistencia;
 import com.cci.service.ServicioPlanilla;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -28,7 +29,7 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean(name = "HRController")
 @SessionScoped
-public class RecursosHumanosController {
+public class RecursosHumanosController implements Serializable{
     
     ServicioAsistencia asistencia = new ServicioAsistencia();
     ServicioPlanilla planillaServicio = new ServicioPlanilla();

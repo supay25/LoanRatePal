@@ -3,6 +3,7 @@ package controllers;
 import com.cci.service.EmpleadoTO;
 import com.cci.service.ServicioRegistro;
 import com.cci.service.UsuarioTO;
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -14,7 +15,7 @@ import javax.faces.bean.SessionScoped;
 
 @ManagedBean(name = "registroController")
 @SessionScoped
-public class RegistroController {
+public class RegistroController implements Serializable {
 
     private EmpleadoTO selectedEmpleado;
     private UsuarioTO selectedUsuario;
